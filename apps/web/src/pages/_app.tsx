@@ -1,3 +1,5 @@
+import "reflect-metadata"
+
 import { NextComponentType } from "next"
 import { AppContext, AppInitialProps, AppProps } from "next/app"
 
