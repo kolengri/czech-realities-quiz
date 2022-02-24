@@ -6,6 +6,6 @@ type Data = {}
 
 export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const fileData = await readFile(resolve("./public/pdf/all-questions.pdf"))
-  //   const data = fileData.map((r) => cleanData(r.Texts))
-  res.status(200).send(JSON.stringify(fileData, null, 2))
+  const data = fileData.TargetQuiz
+  res.status(200).send(JSON.stringify(data, null, 2))
 }

@@ -1,13 +1,20 @@
-import { Type } from "class-transformer"
-import { PageBlockContent } from "./PageBlockContent"
-
+import { Type, Exclude } from "class-transformer"
+import { TextContent } from "./TextContent"
 export class Text {
+  @Exclude()
   x: number
+  // @Exclude()
   y: number
+  // @Exclude()
   w: number
+  // @Exclude()
   sw: number
+  // @Exclude()
   A: string
 
-  @Type(() => PageBlockContent)
-  R: PageBlockContent[]
+  // @Exclude()
+  clr: string
+
+  @Type(() => TextContent)
+  R: TextContent[]
 }
