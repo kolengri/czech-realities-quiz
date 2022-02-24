@@ -4,7 +4,7 @@ import classnames from "classnames"
 
 import styles from "./Button.module.css"
 
-type OuterProps = JSX.IntrinsicElements["div"]
+type OuterProps = JSX.IntrinsicElements["button"]
 
 export type ButtonProps = {
   kind?: "default" | "primary" | "secondary" | "tertiary"
