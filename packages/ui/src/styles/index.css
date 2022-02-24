@@ -1,3 +1,8 @@
+@import "./body";
+@import "./components";
+
 @tailwind base;
+
 @tailwind components;
+
 @tailwind utilities;
