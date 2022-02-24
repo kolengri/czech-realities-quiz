@@ -1,14 +1,21 @@
 {
   "name": "ui",
   "version": "0.0.0",
-  "main": "./index.tsx",
-  "types": "./index.tsx",
+  "main": "./index.ts",
+  "types": "./index.ts",
   "license": "MIT",
+  "scripts": {
+    "component": "hygen component new --name"
+  },
   "devDependencies": {
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
-    "tsconfig": "*",
     "config": "*",
+    "tsconfig": "*",
     "typescript": "^4.5.3"
+  },
+  "dependencies": {
+    "classnames": "^2.3.1",
+    "react-slot-component": "^2.0.0-beta-1"
   }
 }
