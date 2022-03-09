@@ -10,10 +10,30 @@ const fixPoints = (values: string[]) =>
 
     if (["A", "B", "C", "D"].includes(value) && next === ")") {
       values.splice(index + 1, 1)
-      return `${value})`
+      return `${value}) `
     }
     return v
   })
+
+const fixBreaks = (texts: string[]) =>
+  texts.map((text, index) => {
+    const prev = index > 1 ? texts[index - 1] : null
+    const next = index < texts.length ? text[index + 1] : null
+    let newText = text
+    if (text[0] === " " && next) {
+      texts.splice(index + 1, 1)
+      newText = `${newText} ${next}`
+    }
+
+    if (text[text.length - 1] === " " && prev) {
+      texts.splice(index - 1, 1)
+      newText = `${prev} ${text}`
+    }
+
+    return newText
+  })
+
+const fixPointsTexts = (texts: string[]) => texts.map((text, index) => {})
 
 export class Page {
   @Exclude()
@@ -56,6 +76,6 @@ export class Page {
 
   get Text() {
     const result = this.CleanText.flatMap((text) => text.R.map((textContent) => textContent.Content))
-    return fixPoints(result)
+    return fixBreaks(fixPoints(result))
   }
 }
