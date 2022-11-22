@@ -55,7 +55,13 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
         <div className={classnames("flex-1", { "grid grid-cols-2": imageCase })}>
           {randomVariants.map((item, index) => (
             <label key={item.title} className="mb-1 flex gap-2 items-center cursor-pointer p-1">
-              <input type="radio" name={`${title}-${id}`} value={String(item.isCorrect)} onChange={handleChange} />
+              <input
+                type="radio"
+                name={`${title}-${id}`}
+                value={String(item.isCorrect)}
+                onChange={handleChange}
+                disabled={typeof isCorrect === "boolean"}
+              />
               {`${questionAlpha[index]})`} {item.title}
               {item.img && <img height={250} width={250} src={item.img} alt={item.title} />}
             </label>
