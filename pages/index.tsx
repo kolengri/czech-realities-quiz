@@ -31,7 +31,8 @@ const Home: NextPage = () => {
       </Head>
       <div className="sticky flex justify-between items-center top-0 right-0 p-3 bg-gray-100 rounded-md z-50 shadow-md">
         <div>
-          Spravnych odpovedi: {correctAnswers} z {questionsCount}
+          Spravnych odpovedi: {correctAnswers} z {questionsCount} ({Math.round((correctAnswers / questionsCount) * 100)}
+          %)
         </div>
         <div className="text-right flex-1">
           <button
