@@ -1,61 +1,92 @@
-import { Question } from "../../../models"
+import { Question, QuestionCategory } from "../../../models"
 import { parse, HTMLElement } from "node-html-parser"
 
 export interface ParseQuestionsMarkup {
-  (markup: string): Question[]
-}
-
-const isQuestionHeader = (node: HTMLElement) => {
-  return Array.from(node.childNodes).some((n) => n.textContent === "Otázka")
-}
-const isQuestionVariant = (node: HTMLElement) => {
-  return node.textContent.search("odpověď") > 0 || node.textContent.search("Odpověď") > 0
-}
-const isCorrectQuestionVariant = (node: HTMLElement) => {
-  return node.textContent.search("Správná") > 0
-}
-
-const getQuestionTitle = (node: HTMLElement) => {
-  return Array.from(node.childNodes)[2].textContent
+  (markup: string): QuestionCategory[]
 }
 
 const getQuestionImage = (node: HTMLElement) => {
   return node.getElementsByTagName("img")?.[0]?.attributes["src"]
 }
 
+const parseQuestions = (node: HTMLElement): Question[] => {
+  const questions = node.querySelectorAll("li")
+
+  return questions
+    .map((question) => {
+      const $titleText = question.querySelector("div.text")
+      const title = $titleText?.text
+      if (!title) {
+        return null
+      }
+
+      const correctAnswer =
+        question.querySelector("li.spravnaOdpoved .spravne")?.innerText.replace("Správná odpověď: ", "") ?? ""
+      const actuality = question.querySelector("li.datumAktualizace")?.innerText ?? ""
+
+      const variants = question.querySelectorAll("label").map((variant) => ({
+        // remove A) B) C) D) E) from the beginning of the variant
+        title: fixStr(variant.text).replace(/^[A-E]\)\s*/, ""),
+        img: getQuestionImage(variant),
+        isCorrect: fixStr(variant.text).startsWith(correctAnswer),
+      }))
+
+      return {
+        title: fixStr(title),
+        img: getQuestionImage($titleText),
+        actuality: fixStr(actuality),
+        variants,
+      }
+    })
+    .filter((item) => item !== null) as Question[]
+}
+
+const fixStr = (str: string) => str.replace(/\s+/g, " ").trim()
+
 export const parseQuestionsMarkup: ParseQuestionsMarkup = (markup) => {
   const root = parse(markup)
-  const table = root.querySelectorAll("#telo table tr")
-  if (!table) {
+  const elements = root.querySelector("#vypisUloh")
+
+  if (!elements) {
     return []
   }
 
-  return table.reduce((questions: Question[], node) => {
-    if (isQuestionHeader(node)) {
-      const title = getQuestionTitle(node)
-      const img = getQuestionImage(node)
-
-      const nextQuestion: Question = {
-        article: questions.length + 1,
-        title,
-        variants: [],
-        img,
+  const result = (elements.childNodes as any as HTMLElement[]).reduce(
+    (questions: QuestionCategory[], node: HTMLElement) => {
+      if (node.rawTagName === "h2") {
+        return [...questions, { theme: fixStr(node.textContent), themes: [] }]
       }
-      return [...questions, nextQuestion]
-    }
 
-    if (isQuestionVariant(node)) {
-      const latestQuestion = questions[questions.length - 1]
-      const title = getQuestionTitle(node)
-      const isCorrect = isCorrectQuestionVariant(node)
-      latestQuestion.variants.push({
-        title,
-        isCorrect,
-      })
+      if (node.rawTagName === "h3") {
+        const last = questions[questions.length - 1]
+        return [
+          ...questions.slice(0, -1),
+          { ...last, themes: [...last.themes, { theme: fixStr(node.innerText), questions: [] }] },
+        ]
+      }
+
+      if (node.rawTagName === "ol") {
+        const questionsList = parseQuestions(node)
+
+        // add to latest element
+        const last = questions[questions.length - 1]
+        const lastTheme = last.themes[last.themes.length - 1]
+        return [
+          ...questions.slice(0, -1),
+          {
+            ...last,
+            themes: [
+              ...last.themes.slice(0, -1),
+              { ...lastTheme, questions: [...lastTheme.questions, ...questionsList] },
+            ],
+          },
+        ]
+      }
 
       return questions
-    }
+    },
+    []
+  )
 
-    return questions
-  }, [])
+  return result
 }

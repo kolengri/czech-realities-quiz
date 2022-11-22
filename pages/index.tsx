@@ -6,10 +6,10 @@ import { Categories } from "../models"
 import { Main, Container, QuestionCard, Loader } from "../components"
 import { useGetQuestions } from "../hooks/api"
 
-const title = "Test: otázky pro způsobilost"
+const title = "Interaktivní modelový test z českých reálií"
 
 const Home: NextPage = () => {
-  const [category, setCategories] = useState<Categories>(Categories.M)
+  const [category, setCategories] = useState<Categories>(Categories.REALITIES)
   const { data, isValidating } = useGetQuestions(category)
   const [questionsCount, setQuestionsCount] = useState(30)
   const [correctAnswers, setCorrectAnswers] = useState(0)
@@ -76,7 +76,7 @@ const Home: NextPage = () => {
               {questions.map((item) => (
                 <QuestionCard
                   item={item}
-                  key={`${item.article}${nextTest}`}
+                  key={`${item.title}${nextTest}`}
                   onChange={(c) => setCorrectAnswers((i) => (c ? i + 1 : i))}
                 />
               ))}

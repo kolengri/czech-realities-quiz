@@ -1,18 +1,21 @@
+/* eslint-disable @next/next/no-img-element */
 import { ChangeEvent, FC, useMemo, useState } from "react"
 
 import classnames from "classnames"
-import { Question } from "../../models"
+import { QuestionsWithCategories } from "../../models"
 import Image from "next/image"
 import { shuffle } from "../../array"
 
 export type QuestionCardProps = {
-  item: Question
+  item: QuestionsWithCategories
   onChange: (isCorrect: boolean) => void
 }
 
+const questionAlpha = ["A", "B", "C", "D"]
+
 export const QuestionCard: FC<QuestionCardProps> = (props) => {
   const { item, onChange, ...otherProps } = props
-  const { title, variants, article, img } = item
+  const { title, variants, img, id } = item
   const [isCorrect, setIsCorrect] = useState<boolean | undefined>()
   const correctAnswer = variants.find((item) => item.isCorrect)!
   const randomVariants = useMemo(() => shuffle([...variants]), [variants])
@@ -21,6 +24,8 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
     onChange(correct)
     setIsCorrect(correct)
   }
+
+  const imageCase = randomVariants.every((item) => item.img)
 
   return (
     <div
@@ -38,7 +43,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
     >
       <header>
         <h2 className="text-md font-medium mb-2">
-          Č{article}. {title}
+          {id}. {title}
         </h2>
       </header>
       <div
@@ -46,17 +51,25 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
           "flex gap-4 items-center": !!img,
         })}
       >
-        {img && <Image height={250} width={250} src={img} alt={title} objectFit="scale-down" />}
-        <div className="flex-1">
-          {randomVariants.map((item) => (
+        {img && <img height={250} width={250} src={img} alt={title} />}
+        <div className={classnames("flex-1", { "grid grid-cols-2": imageCase })}>
+          {randomVariants.map((item, index) => (
             <label key={item.title} className="mb-1 flex gap-2 items-center cursor-pointer p-1">
-              <input type="radio" name={article.toString()} value={String(item.isCorrect)} onChange={handleChange} />
-              {item.title}
+              <input type="radio" name={`${title}-${id}`} value={String(item.isCorrect)} onChange={handleChange} />
+              {`${questionAlpha[index]})`} {item.title}
+              {item.img && <img height={250} width={250} src={item.img} alt={item.title} />}
             </label>
           ))}
           {isCorrect === false && (
             <div className="p-2 bg-white rounded-sm w-full">Spravna odpoved: {correctAnswer.title}</div>
           )}
+        </div>
+
+        <div className="text-sm text-gray-500">
+          <div>
+            {item.mainTheme} - {item.subThemes}
+          </div>
+          {item.actuality}
         </div>
       </div>
     </div>
