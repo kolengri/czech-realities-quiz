@@ -11,6 +11,7 @@ const title = "Interaktivní modelový test z českých reálií"
 const Home: NextPage = () => {
   const [category, setCategories] = useState<Categories>(Categories.REALITIES)
   const { data, isValidating } = useGetQuestions(category)
+  const maxQuestions = data?.length ?? 0
   const [questionsCount, setQuestionsCount] = useState(30)
   const [correctAnswers, setCorrectAnswers] = useState(0)
   const [nextTest, setNextTest] = useState(0)
@@ -65,7 +66,13 @@ const Home: NextPage = () => {
                   className="ml-2 rounded-sm border-2 border-gray-300 px-2 py-1"
                   type="number"
                   value={questionsCount}
-                  onChange={(event) => setQuestionsCount(Number(event.target.value))}
+                  max={maxQuestions}
+                  min={30}
+                  onChange={(event) =>
+                    setQuestionsCount(
+                      event.target.valueAsNumber > maxQuestions ? maxQuestions : event.target.valueAsNumber
+                    )
+                  }
                 />
               </div>
             </div>
