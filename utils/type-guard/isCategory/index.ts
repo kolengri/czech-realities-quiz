@@ -1,0 +1,1 @@
+export { isCategory } from "./isCategory"

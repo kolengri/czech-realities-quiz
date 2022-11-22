@@ -1,0 +1,1 @@
+export { getPageMarkup } from "./getPageMarkup"
