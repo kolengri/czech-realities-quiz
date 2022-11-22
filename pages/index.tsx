@@ -28,10 +28,18 @@ const Home: NextPage = () => {
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="fixed top-1 right-1 p-3 bg-teal-300 rounded-md">
-        <p>
+      <div className="sticky flex justify-between items-center top-0 right-0 p-3 bg-gray-100 rounded-md z-50 shadow-md">
+        <div>
           Spravnych odpovedi: {correctAnswers} z {questionsCount}
-        </p>
+        </div>
+        <div className="text-right flex-1">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
+            onClick={() => setNextTest((c) => c + 1)}
+          >
+            Začít novy test?
+          </button>
+        </div>
       </div>
       <Main className="my-2">
         <Container>
@@ -59,15 +67,6 @@ const Home: NextPage = () => {
                   value={questionsCount}
                   onChange={(event) => setQuestionsCount(Number(event.target.value))}
                 />
-              </div>
-
-              <div className="text-right flex-1">
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
-                  onClick={() => setNextTest((c) => c + 1)}
-                >
-                  Začít novy test?
-                </button>
               </div>
             </div>
           </div>

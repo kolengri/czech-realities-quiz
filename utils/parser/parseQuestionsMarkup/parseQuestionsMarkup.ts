@@ -14,8 +14,10 @@ const parseQuestions = (node: HTMLElement): Question[] => {
 
   return questions
     .map((question) => {
-      const $titleText = question.querySelector("div.text")
-      const title = $titleText?.text
+      const $pic = question.querySelector("div.q_pic")
+
+      const title = question.querySelector("div.text")?.text
+
       if (!title) {
         return null
       }
@@ -33,7 +35,7 @@ const parseQuestions = (node: HTMLElement): Question[] => {
 
       return {
         title: fixStr(title),
-        img: getQuestionImage($titleText),
+        img: $pic ? getQuestionImage($pic) : undefined,
         actuality: fixStr(actuality),
         variants,
       }

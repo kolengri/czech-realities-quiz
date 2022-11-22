@@ -32,7 +32,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
       className={classnames(
         "question-card",
 
-        "mb-3 shadow-md bg-slate-50 p-5 rounded-md hover:shadow-lg hover:bg-blue-50",
+        "mb-3 shadow-sm bg-slate-50 p-5 rounded-md hover:shadow-lg hover:bg-blue-50",
         {
           "!bg-green-100": isCorrect,
           "!bg-red-100": isCorrect === false,
@@ -51,7 +51,7 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
           "flex gap-4 items-center": !!img,
         })}
       >
-        {img && <img height={250} width={250} src={img} alt={title} />}
+        {img && <img height={400} width={400} src={img} alt={title} />}
         <div className={classnames("flex-1", { "grid grid-cols-2": imageCase })}>
           {randomVariants.map((item, index) => (
             <label key={item.title} className="mb-1 flex gap-2 items-center cursor-pointer p-1">
@@ -60,17 +60,25 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
               {item.img && <img height={250} width={250} src={item.img} alt={item.title} />}
             </label>
           ))}
+
           {isCorrect === false && (
-            <div className="p-2 bg-white rounded-sm w-full">Spravna odpoved: {correctAnswer.title}</div>
+            <div className="p-2 bg-white rounded-sm w-full">
+              Spravna odpoved: {correctAnswer.title}
+              {correctAnswer.img && (
+                <>
+                  <br />
+                  <img height={250} width={250} src={correctAnswer.img} alt={correctAnswer.title} />
+                </>
+              )}
+            </div>
           )}
         </div>
-
-        <div className="text-sm text-gray-500">
-          <div>
-            {item.mainTheme} - {item.subThemes}
-          </div>
-          {item.actuality}
+      </div>
+      <div className="text-sm text-gray-500 mt-3">
+        <div>
+          {item.mainTheme} - {item.subThemes}
         </div>
+        {item.actuality}
       </div>
     </div>
   )
