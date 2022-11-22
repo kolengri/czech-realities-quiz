@@ -1,6 +1,5 @@
 make --dry-run --always-make --keep-going --print-directory
 make: Entering directory `/Users/gkolenko001/Developer/czech-realities-quiz'
+yarn hygen util new --subfolder 
 make: Leaving directory `/Users/gkolenko001/Developer/czech-realities-quiz'
  
-make: *** No targets specified and no makefile found.  Stop.
-

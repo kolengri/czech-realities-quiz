@@ -29,12 +29,12 @@ const Home: NextPage = () => {
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="sticky flex justify-between items-center top-0 right-0 p-3 bg-gray-100 rounded-md z-50 shadow-md">
+      <div className="sticky text-center md:text-inherit md:flex justify-between items-center top-0 right-0 p-3 bg-gray-100 rounded-md z-50 shadow-md">
         <div>
           Spravnych odpovedi: {correctAnswers} z {questionsCount} ({Math.round((correctAnswers / questionsCount) * 100)}
           %)
         </div>
-        <div className="text-right flex-1">
+        <div className="md:text-right flex-1">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
             onClick={() => setNextTest((c) => c + 1)}
@@ -47,7 +47,7 @@ const Home: NextPage = () => {
         <Container>
           <h1 className="text-2xl mb-2">{title}</h1>
           <div className="mb-3">
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center flex-col md:flex-row">
               <div>
                 Kterou kategorii chcete zobrazit?
                 <select
@@ -64,7 +64,7 @@ const Home: NextPage = () => {
               <div>
                 Kolik otažek chcete zobrazit?
                 <input
-                  className="ml-2 rounded-sm border-2 border-gray-300 px-2 py-1"
+                  className="ml-2 rounded-sm border-2 border-gray-300 px-2 py-1 w-17"
                   type="number"
                   value={questionsCount}
                   max={maxQuestions}

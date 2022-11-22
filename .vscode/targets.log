@@ -6,11 +6,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
- 
-make: *** No rule to make target `all'.  Stop.
 
-
-# Make data base, printed on Tue Nov 22 19:11:42 2022
+# Make data base, printed on Tue Nov 22 22:17:14 2022
 
 # Variables
 
@@ -36,8 +33,8 @@ SHELL = /bin/sh
 VSCODE_NLS_CONFIG = {"locale":"en-gb","availableLanguages":{},"_languagePackSupport":true}
 # environment
 _ = /usr/bin/make
-# makefile
-MAKEFILE_LIST := 
+# makefile (from `Makefile', line 1)
+MAKEFILE_LIST :=  Makefile
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
@@ -65,11 +62,11 @@ TTY = not a tty
 # environment
 YSU_VERSION = 1.7.3
 # environment
-FIG_PID = 16281
+FIG_PID = 40854
 # environment
 PWD = /Users/gkolenko001/Developer/czech-realities-quiz
 # environment
-LC_FIG_SET_PARENT = 082e5090-31ef-4344-976d-118b50a84e13
+LC_FIG_SET_PARENT = 943f99d3-e9a6-4728-9457-632ab5174c80
 # environment
 HOMEBREW_CELLAR = /opt/homebrew/Cellar
 # environment
@@ -83,7 +80,7 @@ VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 HOME = /Users/gkolenko001
 # environment
-FIG_PARENT = 082e5090-31ef-4344-976d-118b50a84e13
+FIG_PARENT = 943f99d3-e9a6-4728-9457-632ab5174c80
 # environment
 VSCODE_CODE_CACHE_PATH = /Users/gkolenko001/Library/Application Support/Code/CachedData/6261075646f055b99068d3688932416f2346dd3b
 # environment
@@ -119,7 +116,7 @@ FIG_TERM_VERSION = 2.5.3
 # default
 MAKECMDGOALS := all
 # environment
-TERM_SESSION_ID = w0t3p0:0DF2E9CA-1ADA-4F35-8090-670816DFE102
+TERM_SESSION_ID = w0t2p0:D821D03C-B67E-4C24-919B-EB60B5AC5B9B
 # environment
 LESS = -R
 # automatic
@@ -159,7 +156,7 @@ HOMEBREW_PREFIX = /opt/homebrew
 # automatic
 +F = $(notdir $+)
 # environment
-ITERM_SESSION_ID = w0t3p0:0DF2E9CA-1ADA-4F35-8090-670816DFE102
+ITERM_SESSION_ID = w0t2p0:D821D03C-B67E-4C24-919B-EB60B5AC5B9B
 # environment
 HOMEBREW_REPOSITORY = /opt/homebrew
 # environment
@@ -167,7 +164,6 @@ COLORFGBG = 7;0
 # environment
 __CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x0
 # environment
- 
 COMMAND_MODE = unix2003
 # default
 MAKEFILES := 
@@ -180,25 +176,25 @@ PAGER = less
 # environment
 LC_ALL = C
 # environment
-FIGTERM_SESSION_ID = 082e5090-31ef-4344-976d-118b50a84e13
+FIGTERM_SESSION_ID = 943f99d3-e9a6-4728-9457-632ab5174c80
 # automatic
 ^F = $(notdir $^)
 # default
 SUFFIXES := 
 # environment
-FIG_SET_PARENT = 082e5090-31ef-4344-976d-118b50a84e13
+FIG_SET_PARENT = 943f99d3-e9a6-4728-9457-632ab5174c80
 # environment
 MAKELEVEL := 0
 # makefile
-.DEFAULT_GOAL := 
+.DEFAULT_GOAL := util
 # environment
 LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 16238
+VSCODE_PID = 40794
 # variable set hash-table stats:
-# Load=91/1024=9%, Rehash=0, Collisions=7/111=6%
+# Load=91/1024=9%, Rehash=0, Collisions=8/114=7%
 
 # Pattern-specific Variable Values
 
@@ -206,9 +202,9 @@ VSCODE_PID = 16238
 
 # Directories
 
-# . (device 16777232, inode 35482580): 11 files, no impossibilities.
+# . (device 16777232, inode 35482580): 32 files, no impossibilities.
 
-# 11 files, no impossibilities in 1 directories.
+# 32 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -233,23 +229,28 @@ all:
 
 # Not a target:
 Makefile:
-#  A default, MAKEFILES, or -include/sinclude makefile.
 #  Implicit rule search has been done.
-#  File does not exist.
+#  Last modified 2022-06-07 19:36:57
 #  File has been updated.
-#  Failed to be updated.
+#  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-# Not a target:
-makefile:
-#  A default, MAKEFILES, or -include/sinclude makefile.
-#  Implicit rule search has been done.
-#  File does not exist.
-#  File has been updated.
-#  Failed to be updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+test:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 8):
+	@ yarn test
+	
+
+component:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 5):
+	@ yarn hygen component new $(word 2, $(MAKECMDGOALS))
+	
 
 # Not a target:
 .DEFAULT:
@@ -257,29 +258,29 @@ makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
-# Not a target:
-GNUmakefile:
-#  A default, MAKEFILES, or -include/sinclude makefile.
-#  Implicit rule search has been done.
-#  File does not exist.
-#  File has been updated.
-#  Failed to be updated.
-# variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+util:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 2):
+	@ yarn hygen util new --subfolder $(word 2, $(MAKECMDGOALS))
+	
 
 # files hash-table stats:
-# Load=6/1024=1%, Rehash=0, Collisions=0/17=0%
+# Load=7/1024=1%, Rehash=0, Collisions=0/19=0%
 # VPATH Search Paths
 
 # No `vpath' search paths.
 
 # No general (`VPATH' variable) search path.
 
-# # of strings in strcache: 0
-# # of strcache buffers: 0
-# strcache size: total = 0 / max = 0 / min = 4096 / avg = 0
-# strcache free: total = 0 / max = 0 / min = 4096 / avg = 0
+# # of strings in strcache: 1
+# # of strcache buffers: 1
+# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
+# strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Nov 22 19:11:42 2022
+# Finished Make data base on Tue Nov 22 22:17:14 2022
 
  
+make: *** No rule to make target `all'.  Stop.
+

@@ -48,11 +48,11 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
       </header>
       <div
         className={classnames({
-          "flex gap-4 items-center": !!img,
+          "md:flex gap-4 items-center": !!img,
         })}
       >
         {img && <img height={400} width={400} src={img} alt={title} />}
-        <div className={classnames("flex-1", { "grid grid-cols-2": imageCase })}>
+        <div className={classnames("flex-1", { "grid grid-cols-1 md:grid-cols-2": imageCase })}>
           {randomVariants.map((item, index) => (
             <label key={item.title} className="mb-1 flex gap-2 items-center cursor-pointer p-1">
               <input
