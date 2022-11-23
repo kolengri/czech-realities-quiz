@@ -2,21 +2,16 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import { QuestionsWithCategories } from "../../models"
 import { getPageMarkup, parseQuestionsMarkup } from "../../parser"
 import { QUESTIONS_URL } from "../../config"
-import { isCategory } from "../../type-guard"
 
-import Cache from "file-system-cache"
-import { resolve } from "path"
-
-const cache = Cache({
-  ns: "questions", // Optional. A grouping namespace for items.
-})
+import cache from "memory-cache"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<QuestionsWithCategories[]>) {
+  res.setHeader("Cache-Control", "s-maxage=86400")
   const url = QUESTIONS_URL["REALITIES"]
   let questions: QuestionsWithCategories[] = []
 
   try {
-    questions = await cache.get(url)
+    questions = cache.get(url)
     if (questions.length === 0) {
       throw new Error("Cache is empty")
     }
@@ -38,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     questions = flat
 
-    await cache.set(url, questions)
+    cache.put(url, questions)
   } finally {
     res.status(200).json(questions)
   }
