@@ -27,7 +27,7 @@ const Home: NextPage<Props> = (props) => {
   const maxQuestions = data?.length ?? 0
   const [questionsCount, setQuestionsCount] = useState(DEFAULT_COUNT)
   const [correctAnswers, setCorrectAnswers] = useState(0)
-  const [questions, setQuestions] = useState(data)
+  const [questions, setQuestions] = useState(data.slice(0, questionsCount))
   const correctPercentage = Math.round((correctAnswers / questionsCount) * 100)
   const seed = questions.map((q) => q.id).join("")
 
@@ -38,9 +38,12 @@ const Home: NextPage<Props> = (props) => {
 
   const handleQuestionCount = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setQuestionsCount(event.target.valueAsNumber > maxQuestions ? maxQuestions : event.target.valueAsNumber)
+      // next count bettween 1 and maxQuestions
+      const nextCount = Math.max(1, Math.min(maxQuestions, event.target.valueAsNumber))
+      setQuestions(data.slice(0, nextCount))
+      setQuestionsCount(nextCount)
     },
-    [setQuestionsCount, maxQuestions]
+    [setQuestionsCount, maxQuestions, data]
   )
 
   const handleQuestionAnswer = useCallback(
@@ -104,7 +107,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   return {
     props: {
-      data: shuffleQuestions(data, DEFAULT_COUNT),
+      data: shuffle(data),
     }, // will be passed to the page component as props
   }
 }
