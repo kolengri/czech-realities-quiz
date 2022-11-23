@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { shuffle } from "../array"
 import { QuestionsWithCategories } from "../models"
 import { Main, Container, QuestionCard } from "../components"
@@ -29,7 +29,7 @@ const Home: NextPage<Props> = (props) => {
   const [correctAnswers, setCorrectAnswers] = useState(0)
   const [questions, setQuestions] = useState(data.slice(0, questionsCount))
   const correctPercentage = Math.round((correctAnswers / questionsCount) * 100)
-  const seed = questions.map((q) => q.id).join("")
+  const seed = useMemo(() => questions.map((q) => q.id).join(""), [questions])
 
   const handleNewTest = useCallback(() => {
     setCorrectAnswers(0)
@@ -39,7 +39,7 @@ const Home: NextPage<Props> = (props) => {
   const handleQuestionCount = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       // next count bettween 1 and maxQuestions
-      const nextCount = Math.max(1, Math.min(maxQuestions, event.target.valueAsNumber))
+      const nextCount = Math.max(1, Math.min(maxQuestions, event.target.valueAsNumber ?? 0))
       setQuestions(data.slice(0, nextCount))
       setQuestionsCount(nextCount)
     },
