@@ -1,28 +1,35 @@
-import type { NextPage } from "next"
 import Head from "next/head"
-import { useEffect, useMemo, useState } from "react"
+import { useState } from "react"
 import { shuffle } from "../array"
-import { Categories } from "../models"
-import { Main, Container, QuestionCard, Loader } from "../components"
-import { useGetQuestions } from "../hooks/api"
+import { QuestionsWithCategories } from "../models"
+import { Main, Container, QuestionCard } from "../components"
+import { GetServerSidePropsContext, NextPage } from "next"
+import absoluteUrl from "next-absolute-url"
 
 const title = "Interaktivní modelový test z českých reálií"
 
-const Home: NextPage = () => {
-  const [category, setCategories] = useState<Categories>(Categories.REALITIES)
-  const { data, isValidating } = useGetQuestions(category)
-  const maxQuestions = data?.length ?? 0
-  const [questionsCount, setQuestionsCount] = useState(30)
-  const [correctAnswers, setCorrectAnswers] = useState(0)
-  const [nextTest, setNextTest] = useState(0)
-  const questions = useMemo(
-    () => shuffle([...(data ?? [])]).splice(0, questionsCount),
-    [data, questionsCount, nextTest]
-  )
+const getQuestions = async (baseUrl: string): Promise<QuestionsWithCategories[]> => {
+  const res = await fetch(`${baseUrl}/api/questions`)
+  return res.json()
+}
 
-  useEffect(() => {
-    setCorrectAnswers(0)
-  }, [questions])
+const shuffleQuestions = (questions: QuestionsWithCategories[], count: number) => {
+  const shuffled = shuffle(questions)
+  return shuffled.slice(0, count)
+}
+
+type Props = { data: QuestionsWithCategories[] }
+
+const DEFAULT_COUNT = 30
+
+const Home: NextPage<Props> = (props) => {
+  const { data } = props
+  const maxQuestions = data?.length ?? 0
+  const [questionsCount, setQuestionsCount] = useState(DEFAULT_COUNT)
+  const [correctAnswers, setCorrectAnswers] = useState(0)
+  const [questions, setQuestions] = useState(data)
+  const correctPercentage = Math.round((correctAnswers / questionsCount) * 100)
+  const seed = questions.map((q) => q.id).join("")
 
   return (
     <>
@@ -31,13 +38,12 @@ const Home: NextPage = () => {
       </Head>
       <div className="sticky text-center md:text-inherit md:flex justify-between items-center top-0 right-0 p-3 bg-gray-100 rounded-md z-50 shadow-md">
         <div>
-          Spravnych odpovedi: {correctAnswers} z {questionsCount} ({Math.round((correctAnswers / questionsCount) * 100)}
-          %)
+          Spravnych odpovedi: {correctAnswers} z {questionsCount} ({correctPercentage}%)
         </div>
         <div className="md:text-right flex-1">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
-            onClick={() => setNextTest((c) => c + 1)}
+            onClick={() => setQuestions(shuffleQuestions(data, questionsCount))}
           >
             Začít novy test?
           </button>
@@ -48,19 +54,6 @@ const Home: NextPage = () => {
           <h1 className="text-2xl mb-2">{title}</h1>
           <div className="mb-3">
             <div className="flex gap-4 items-center flex-col md:flex-row">
-              <div>
-                Kterou kategorii chcete zobrazit?
-                <select
-                  onChange={(e) => setCategories(e.target.value as Categories)}
-                  className="bg-slate-100 px-3 py-2 ml-2 rounded-sm"
-                >
-                  {Object.keys(Categories).map((key) => (
-                    <option key={key} value={key} selected={key === category}>
-                      {key}
-                    </option>
-                  ))}
-                </select>
-              </div>
               <div>
                 Kolik otažek chcete zobrazit?
                 <input
@@ -78,21 +71,30 @@ const Home: NextPage = () => {
               </div>
             </div>
           </div>
-          <div>
-            <Loader loading={isValidating}>
-              {questions.map((item) => (
-                <QuestionCard
-                  item={item}
-                  key={`${item.title}${nextTest}`}
-                  onChange={(c) => setCorrectAnswers((i) => (c ? i + 1 : i))}
-                />
-              ))}
-            </Loader>
-          </div>
+          {questions.map((item) => (
+            <QuestionCard
+              seed={seed}
+              item={item}
+              key={`${item.id}`}
+              onChange={(c) => setCorrectAnswers((i) => (c ? i + 1 : i))}
+            />
+          ))}
         </Container>
       </Main>
     </>
   )
+}
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  const url = absoluteUrl(context.req)
+
+  const data = await getQuestions(url.origin)
+
+  return {
+    props: {
+      data: shuffleQuestions(data, DEFAULT_COUNT),
+    }, // will be passed to the page component as props
+  }
 }
 
 export default Home

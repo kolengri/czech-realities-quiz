@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     domains: ["spspraha.cz", "www.spspraha.cz"],
   },
+  swcMinify: true,
 }
 
 module.exports = nextConfig

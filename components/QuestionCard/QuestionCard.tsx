@@ -1,24 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
-import { ChangeEvent, FC, useMemo, useState } from "react"
+import { ChangeEvent, FC, memo, useMemo, useState } from "react"
 
 import classnames from "classnames"
 import { QuestionsWithCategories } from "../../models"
-import Image from "next/image"
 import { shuffle } from "../../array"
 
 export type QuestionCardProps = {
   item: QuestionsWithCategories
+  seed: string
   onChange: (isCorrect: boolean) => void
 }
 
 const questionAlpha = ["A", "B", "C", "D"]
 
-export const QuestionCard: FC<QuestionCardProps> = (props) => {
-  const { item, onChange, ...otherProps } = props
+const QuestionCardMemo: FC<QuestionCardProps> = (props) => {
+  const { item, onChange, seed, ...otherProps } = props
   const { title, variants, img, id } = item
   const [isCorrect, setIsCorrect] = useState<boolean | undefined>()
   const correctAnswer = variants.find((item) => item.isCorrect)!
-  const randomVariants = useMemo(() => shuffle([...variants]), [variants])
+  const randomVariants = useMemo(() => shuffle(variants, seed), [variants, seed])
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const correct = event.target.value === "true"
     onChange(correct)
@@ -89,3 +89,5 @@ export const QuestionCard: FC<QuestionCardProps> = (props) => {
     </div>
   )
 }
+
+export const QuestionCard = memo(QuestionCardMemo)
