@@ -8,7 +8,6 @@ import Cache from "file-system-cache"
 import { resolve } from "path"
 
 const cache = Cache({
-  basePath: resolve("../../.next/.cache"), // Optional. Path where cache files are stored (default).
   ns: "questions", // Optional. A grouping namespace for items.
 })
 
