@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { ChangeEvent, FC, memo, useMemo, useState } from "react"
+import { ChangeEvent, FC, memo, useCallback, useEffect, useMemo, useState } from "react"
 
 import classnames from "classnames"
 import { QuestionsWithCategories } from "../../models"
@@ -19,11 +19,15 @@ const QuestionCardMemo: FC<QuestionCardProps> = (props) => {
   const [isCorrect, setIsCorrect] = useState<boolean | undefined>()
   const correctAnswer = variants.find((item) => item.isCorrect)!
   const randomVariants = useMemo(() => shuffle(variants, seed), [variants, seed])
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const correct = event.target.value === "true"
-    onChange(correct)
-    setIsCorrect(correct)
-  }
+
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const correct = event.target.value === "true"
+      onChange(correct)
+      setIsCorrect(correct)
+    },
+    [onChange]
+  )
 
   const imageCase = randomVariants.every((item) => item.img)
 

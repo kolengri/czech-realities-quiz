@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { shuffle } from "../array"
 import { QuestionsWithCategories } from "../models"
 import { Main, Container, QuestionCard } from "../components"
@@ -31,6 +31,27 @@ const Home: NextPage<Props> = (props) => {
   const correctPercentage = Math.round((correctAnswers / questionsCount) * 100)
   const seed = questions.map((q) => q.id).join("")
 
+  const handleNewTest = useCallback(() => {
+    setCorrectAnswers(0)
+    setQuestions(shuffleQuestions(data, questionsCount))
+  }, [data, questionsCount])
+
+  const handleQuestionCount = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setQuestionsCount(event.target.valueAsNumber > maxQuestions ? maxQuestions : event.target.valueAsNumber)
+    },
+    [setQuestionsCount, maxQuestions]
+  )
+
+  const handleQuestionAnswer = useCallback(
+    (isCorrect: boolean) => {
+      if (isCorrect) {
+        setCorrectAnswers((prev) => prev + 1)
+      }
+    },
+    [setCorrectAnswers]
+  )
+
   return (
     <>
       <Head>
@@ -43,7 +64,7 @@ const Home: NextPage<Props> = (props) => {
         <div className="md:text-right flex-1">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
-            onClick={() => setQuestions(shuffleQuestions(data, questionsCount))}
+            onClick={handleNewTest}
           >
             Začít novy test?
           </button>
@@ -62,22 +83,13 @@ const Home: NextPage<Props> = (props) => {
                   value={questionsCount}
                   max={maxQuestions}
                   min={30}
-                  onChange={(event) =>
-                    setQuestionsCount(
-                      event.target.valueAsNumber > maxQuestions ? maxQuestions : event.target.valueAsNumber
-                    )
-                  }
+                  onChange={handleQuestionCount}
                 />
               </div>
             </div>
           </div>
           {questions.map((item) => (
-            <QuestionCard
-              seed={seed}
-              item={item}
-              key={`${item.id}`}
-              onChange={(c) => setCorrectAnswers((i) => (c ? i + 1 : i))}
-            />
+            <QuestionCard seed={seed} item={item} key={`${item.id}-${seed}`} onChange={handleQuestionAnswer} />
           ))}
         </Container>
       </Main>
