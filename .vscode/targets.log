@@ -6,11 +6,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
- 
-make: *** No rule to make target `all'.  Stop.
 
-
-# Make data base, printed on Wed Nov 23 20:17:30 2022
+# Make data base, printed on Sat Nov 26 22:28:56 2022
 
 # Variables
 
@@ -55,7 +52,6 @@ NVM_BIN = /Users/gkolenko001/.nvm/versions/node/v16.15.0/bin
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # default
- 
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
 SSH_AUTH_SOCK = /var/folders/84/hjmcnr6s77z9xnfx8k8xdb500000gn/T//ssh-kh6lq81wbM87/agent.1058
@@ -66,11 +62,11 @@ TTY = not a tty
 # environment
 YSU_VERSION = 1.7.3
 # environment
-FIG_PID = 91583
+FIG_PID = 59147
 # environment
 PWD = /Users/gkolenko001/Developer/czech-realities-quiz
 # environment
-LC_FIG_SET_PARENT = 8a113b7f-fffe-4293-baad-8ced8746f455
+LC_FIG_SET_PARENT = ce398f62-6276-4891-8742-9dad99ff81fd
 # environment
 HOMEBREW_CELLAR = /opt/homebrew/Cellar
 # environment
@@ -84,7 +80,7 @@ VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 HOME = /Users/gkolenko001
 # environment
-FIG_PARENT = 8a113b7f-fffe-4293-baad-8ced8746f455
+FIG_PARENT = ce398f62-6276-4891-8742-9dad99ff81fd
 # environment
 VSCODE_CODE_CACHE_PATH = /Users/gkolenko001/Library/Application Support/Code/CachedData/6261075646f055b99068d3688932416f2346dd3b
 # environment
@@ -120,7 +116,7 @@ FIG_TERM_VERSION = 2.5.3
 # default
 MAKECMDGOALS := all
 # environment
-TERM_SESSION_ID = w0t0p0:69077D98-C195-4655-85E2-524A5B42D70C
+TERM_SESSION_ID = w0t0p0:755D4AD5-A0AD-4F18-B264-B8FD6953A7B8
 # environment
 LESS = -R
 # automatic
@@ -160,7 +156,7 @@ HOMEBREW_PREFIX = /opt/homebrew
 # automatic
 +F = $(notdir $+)
 # environment
-ITERM_SESSION_ID = w0t0p0:69077D98-C195-4655-85E2-524A5B42D70C
+ITERM_SESSION_ID = w0t0p0:755D4AD5-A0AD-4F18-B264-B8FD6953A7B8
 # environment
 HOMEBREW_REPOSITORY = /opt/homebrew
 # environment
@@ -180,13 +176,13 @@ PAGER = less
 # environment
 LC_ALL = C
 # environment
-FIGTERM_SESSION_ID = 8a113b7f-fffe-4293-baad-8ced8746f455
+FIGTERM_SESSION_ID = ce398f62-6276-4891-8742-9dad99ff81fd
 # automatic
 ^F = $(notdir $^)
 # default
 SUFFIXES := 
 # environment
-FIG_SET_PARENT = 8a113b7f-fffe-4293-baad-8ced8746f455
+FIG_SET_PARENT = ce398f62-6276-4891-8742-9dad99ff81fd
 # environment
 MAKELEVEL := 0
 # makefile
@@ -196,9 +192,8 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 91550
+VSCODE_PID = 59116
 # variable set hash-table stats:
- 
 # Load=91/1024=9%, Rehash=0, Collisions=8/114=7%
 
 # Pattern-specific Variable Values
@@ -273,7 +268,6 @@ util:
 
 # files hash-table stats:
 # Load=7/1024=1%, Rehash=0, Collisions=0/19=0%
- 
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -285,6 +279,8 @@ util:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Wed Nov 23 20:17:30 2022
+# Finished Make data base on Sat Nov 26 22:28:56 2022
 
  
+make: *** No rule to make target `all'.  Stop.
+

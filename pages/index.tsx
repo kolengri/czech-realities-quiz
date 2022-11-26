@@ -1,50 +1,52 @@
 import Head from "next/head"
 import { useCallback, useMemo, useState } from "react"
 import { shuffle } from "../array"
-import { QuestionsWithCategories } from "../models"
+import { QuestionCategory, QuestionsWithCategories } from "../models"
 import { Main, Container, QuestionCard } from "../components"
 import { GetServerSidePropsContext, NextPage } from "next"
 import absoluteUrl from "next-absolute-url"
 
+type Props = { data: QuestionCategory[]; seed: string }
+
 const title = "Interaktivní modelový test z českých reálií"
 
-const getQuestions = async (baseUrl: string): Promise<QuestionsWithCategories[]> => {
+const getQuestions = async (baseUrl: string): Promise<QuestionCategory[]> => {
   const res = await fetch(`${baseUrl}/api/questions`)
   return res.json()
 }
 
-const shuffleQuestions = (questions: QuestionsWithCategories[], count: number) => {
-  const shuffled = shuffle(questions)
-  return shuffled.slice(0, count)
+const backTop = () => window.scrollTo({ top: 0, behavior: "smooth" })
+
+const generateTest = (mainCategories: QuestionCategory[], seed: string): QuestionsWithCategories[] => {
+  const categories = shuffle(mainCategories, seed)
+  return categories.flatMap((category, categoryIndex) => {
+    return category.themes.flatMap((theme, themeIndex): QuestionsWithCategories => {
+      const [question] = shuffle(theme.questions, seed)
+
+      return {
+        ...question,
+        mainTheme: category.name,
+        subTheme: theme.name,
+        id: `${categoryIndex}-${themeIndex}-${seed}`,
+      }
+    })
+  })
 }
 
-type Props = { data: QuestionsWithCategories[] }
-
-const DEFAULT_COUNT = 30
+const newSeed = () => Math.random().toString(36).substring(2, 12)
 
 const Home: NextPage<Props> = (props) => {
-  const { data } = props
-  const maxQuestions = data?.length ?? 0
-  const [questionsCount, setQuestionsCount] = useState(DEFAULT_COUNT)
+  const { data, seed } = props
   const [correctAnswers, setCorrectAnswers] = useState(0)
-  const [questions, setQuestions] = useState(data.slice(0, questionsCount))
-  const correctPercentage = Math.round((correctAnswers / questionsCount) * 100)
-  const seed = useMemo(() => questions.map((q) => q.id).join(""), [questions])
+  const [questions, setQuestions] = useState(generateTest(data, seed))
+  const total = questions.length
+  const correctPercentage = Math.round((correctAnswers / total) * 100)
 
   const handleNewTest = useCallback(() => {
     setCorrectAnswers(0)
-    setQuestions(shuffleQuestions(data, questionsCount))
-  }, [data, questionsCount])
-
-  const handleQuestionCount = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      // next count bettween 1 and maxQuestions
-      const nextCount = Math.max(1, Math.min(maxQuestions, event.target.valueAsNumber ?? 0))
-      setQuestions(data.slice(0, nextCount))
-      setQuestionsCount(nextCount)
-    },
-    [setQuestionsCount, maxQuestions, data]
-  )
+    setQuestions(generateTest(data, newSeed()))
+    backTop()
+  }, [data])
 
   const handleQuestionAnswer = useCallback(
     (isCorrect: boolean) => {
@@ -60,9 +62,11 @@ const Home: NextPage<Props> = (props) => {
       <Head>
         <title>{title}</title>
       </Head>
+      <div className="h-2 bg-blue-200" />
+
       <div className="sticky text-center md:text-inherit md:flex justify-between items-center top-0 right-0 p-3 bg-gray-100 rounded-md z-50 shadow-md">
         <div>
-          Spravnych odpovedi: {correctAnswers} z {questionsCount} ({correctPercentage}%)
+          Spravnych odpovedi: {correctAnswers} z {total} ({correctPercentage}%)
         </div>
         <div className="md:text-right flex-1">
           <button
@@ -76,26 +80,16 @@ const Home: NextPage<Props> = (props) => {
       <Main className="my-2">
         <Container>
           <h1 className="text-2xl mb-2">{title}</h1>
-          <div className="mb-3">
-            <div className="flex gap-4 items-center flex-col md:flex-row">
-              <div>
-                Kolik otažek chcete zobrazit?
-                <input
-                  className="ml-2 rounded-sm border-2 border-gray-300 px-2 py-1 w-17"
-                  type="number"
-                  value={questionsCount}
-                  max={maxQuestions}
-                  min={30}
-                  onChange={handleQuestionCount}
-                />
-              </div>
-            </div>
-          </div>
-          {questions.map((item) => (
-            <QuestionCard seed={seed} item={item} key={`${item.id}-${seed}`} onChange={handleQuestionAnswer} />
+
+          {questions.map((item, index) => (
+            <QuestionCard index={index} seed={seed} item={item} key={item.id} onChange={handleQuestionAnswer} />
           ))}
         </Container>
       </Main>
+      <footer className="bg-sky-100 p-2">
+        {/* copiright with year */}
+        <div className="text-center text-gray-500 text-sm py-2">© {new Date().getFullYear()}</div>
+      </footer>
     </>
   )
 }
@@ -107,8 +101,9 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
   return {
     props: {
-      data: shuffle(data),
-    }, // will be passed to the page component as props
+      seed: newSeed(),
+      data,
+    },
   }
 }
 

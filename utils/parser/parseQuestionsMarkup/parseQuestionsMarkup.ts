@@ -56,14 +56,14 @@ export const parseQuestionsMarkup: ParseQuestionsMarkup = (markup) => {
   const result = (elements.childNodes as any as HTMLElement[]).reduce(
     (questions: QuestionCategory[], node: HTMLElement) => {
       if (node.rawTagName === "h2") {
-        return [...questions, { theme: fixStr(node.textContent), themes: [] }]
+        return [...questions, { name: fixStr(node.textContent), themes: [] }]
       }
 
       if (node.rawTagName === "h3") {
         const last = questions[questions.length - 1]
         return [
           ...questions.slice(0, -1),
-          { ...last, themes: [...last.themes, { theme: fixStr(node.innerText), questions: [] }] },
+          { ...last, themes: [...last.themes, { name: fixStr(node.innerText), questions: [] }] },
         ]
       }
 

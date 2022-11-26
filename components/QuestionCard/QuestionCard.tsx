@@ -8,13 +8,14 @@ import { shuffle } from "../../array"
 export type QuestionCardProps = {
   item: QuestionsWithCategories
   seed: string
+  index: number
   onChange: (isCorrect: boolean) => void
 }
 
 const questionAlpha = ["A", "B", "C", "D"]
 
 const QuestionCardMemo: FC<QuestionCardProps> = (props) => {
-  const { item, onChange, seed, ...otherProps } = props
+  const { index, item, onChange, seed, ...otherProps } = props
   const { title, variants, img, id } = item
   const [isCorrect, setIsCorrect] = useState<boolean | undefined>()
   const correctAnswer = variants.find((item) => item.isCorrect)!
@@ -47,7 +48,7 @@ const QuestionCardMemo: FC<QuestionCardProps> = (props) => {
     >
       <header>
         <h2 className="text-md font-medium mb-2">
-          {id}. {title}
+          {index + 1}. {title}
         </h2>
       </header>
       <div
@@ -86,7 +87,7 @@ const QuestionCardMemo: FC<QuestionCardProps> = (props) => {
       </div>
       <div className="text-sm text-gray-500 mt-3">
         <div>
-          {item.mainTheme} - {item.subThemes}
+          {item.mainTheme} - {item.subTheme}
         </div>
         {item.actuality}
       </div>

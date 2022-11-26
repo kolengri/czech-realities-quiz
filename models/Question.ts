@@ -1,10 +1,10 @@
 export type QuestionCategory = {
-  theme: string
+  name: string
   themes: QuestionTheme[]
 }
 
 export type QuestionTheme = {
-  theme: string
+  name: string
   questions: Question[]
 }
 
@@ -20,7 +20,7 @@ export type Question = {
 }
 
 export type QuestionsWithCategories = {
-  id: number
+  id: string
   mainTheme: string
-  subThemes: string
+  subTheme: string
 } & Question
