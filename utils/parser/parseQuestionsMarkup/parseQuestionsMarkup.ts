@@ -48,7 +48,6 @@ const fixStr = (str: string) => str.replace(/\s+/g, " ").trim()
 export const parseQuestionsMarkup: ParseQuestionsMarkup = (markup) => {
   const root = parse(markup)
   const elements = root.querySelector("#vypisUloh")
-
   if (!elements) {
     return []
   }
